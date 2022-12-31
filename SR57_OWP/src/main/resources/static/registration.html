@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base href="/SR57_OWP/">
+	<title>Registration</title>
+	<link rel="stylesheet" type="text/css" href="css/StyleForm.css"/>
+	<script src="webjars/jquery/3.2.1/jquery.js" type="text/javascript"></script>
+	<script src="webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="js/registration.js" type="text/javascript"></script>
+</head>
+<body>
+	<br/>
+	<form id="registration" method="post" action="registration">
+		<table>
+			<caption>Registration</caption>
+			<tr><th>User Name:</th><td><input type="text" value="" name="userName" required/></td></tr>
+			<tr><th>Password:</th><td><input type="password" value="" name="password" required/></td></tr>
+			<tr><th>Email:</th><td><input type="text" value="" name="email" required/></td></tr>
+			<tr><th>First Name:</th><td><input type="text" value="" name="firstName" required/></td></tr>
+			<tr><th>Last Name:</th><td><input type="text" value="" name="lastName" required/></td></tr>
+			<tr><th>Date of Birth:</th><td><input type="date" value="" name="dateOfBirth" required/></td></tr>
+			<tr><th>Address:</th><td><input type="text" value="" name="address" required/></td></tr>
+			<tr><th>Phone Number:</th><td><input type="text" value="" name="phoneNumber" required/></td></tr>
+			<!-- <tr><th>User Role:</th><td><select type="hidden" id="UserRole" class="form-control" data-val="true" data-val-required="Tip mora" name="userRole">
+			<option value="Member">Member</option>
+			</select></td></tr> -->
+			<tr><th></th><td><input type="submit" value="Register" /></td>
+		</table>
+		</form>
+	<button onclick="location.href = 'login.html';" class="float-left submit-button" >Return</button>
+</body>
+</html>

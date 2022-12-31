@@ -1,0 +1,44 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org">     
+	<head>     
+		<meta charset="UTF-8">
+		<base th:href="@{/}">     
+		<link rel="stylesheet"  type="text/css"  href="css/NavigationBar.css"/>     
+		<link rel="stylesheet"  type="text/css"  href="css/StyleTable.css"/>
+		<script src="webjars/jquery/3.2.1/jquery.js" type="text/javascript"></script>
+		<script src="webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
+		<script src="js/forOrdering.js" type="text/javascript"></script>
+		<script src="js/lokacijaJS.js" type="text/javascript"></script>
+		<title>For Ordering</title>           
+	 </head>     
+	 <body>
+	 <div>
+	 <ul>     
+		 <li style="float:right"><a class="logOut" href="users/logout">Logout</a></li>            
+		 <li><a href="halls">Halls</a></li>  
+		 <li><a href="workoutTypes">Workout Types</a></li>
+		 <li><a href="workouts">Workouts</a></li>
+		 <li><a href="workoutAppointments">Appointments</a></li>  
+	 </ul>
+
+	<table class="tabela" id="ordered">
+			<caption>For Ordering</caption> 
+			<tr>
+				<th>Name</th>
+				<th>Price</th>
+				<th>Grouping</th>
+				<th>Level</th>
+				<th></th>
+			</tr>
+		</table>
+		<br/>
+		<form method="post" action="shoppingCarts/orderWorkout">
+			<table class="tabela">
+		 	<caption>Proceed with the Order?</caption> 
+				<td><input type="submit" value="Order"></td>
+			</table>
+		</form>
+	
+	 		</div>         
+	 </body>   
+ </html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StyleForm.css"/>
+	<link rel="stylesheet" type="text/css" href="css/NavigationBar.css"/>
+	<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="js/lokacijaJS.js"></script>
+	<title th:text="#{workoutAppointment.pageTitle}"></title> 
+</head>
+<body>
+	<ul>    
+ 		 <li style="float:right"><a class="logOut" href="users/logout">Logout</a></li> 
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="users" th:text="#{link.users}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="trainers" th:text="#{link.trainers}"></a></li>            
+		 <li><a href="halls" th:text="#{link.halls}"></a></li>  
+		 <li><a href="workoutTypes" th:text="#{link.workoutTypes}"></a></li>
+		 <li><a href="workouts" th:text="#{link.workouts}"></a></li>
+		 <li><a href="workoutAppointments" th:text="#{link.workoutAppointments}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="comments" th:text="#{link.comments}"></a></li>
+		 <li><a href="membershipCards" th:text="#{link.membershipCards}"></a></li>
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|wishLists/details?username=${session.user.userName}|" th:text="#{link.wishLists}"></a></li> 
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|shoppingCarts/details?username=${session.user.userName}|" th:text="#{link.shoppingCarts}"></a></li>
+		 <li style="float:right"><a th:href="|users/detailsPersonal?id=${session.user.id}|" th:text="#{link.personal}"></a></li>     
+ 	</ul>
+ 	<br>
+ 	<div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value="en" th:text="#{lang.eng}" th:selected="${#strings.equals(#locale.language,'en')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>
+	<br>  
+	<form method="post" action="workoutAppointments/edit">
+		<input type="hidden" name="id" th:value="${workoutAppointment.id}"/>
+		<table class="tabela">
+			<caption th:text="#{workoutAppointment.caption}"></caption>
+				<tr>
+					<th th:text="#{workoutAppointment.dateAndTime}"></th>
+					<td>
+						<input type="date" th:value="${#temporals.format(workoutAppointment.dateOfWorkout, 'yyyy-MM-dd')}" name="date"/>&nbsp;
+						<input type="time" th:value="${#temporals.format(workoutAppointment.dateOfWorkout, 'HH:mm')}" name="time"/>
+					</td>
+				</tr>
+				<tr>
+					<th th:text="#{workoutAppointment.hall}"></th>
+					<td>
+						<select name="hallId">
+							<option th:each="itHall: ${halls}" th:value="${itHall.id}" th:text="${itHall.hallLabel}" th:selected="${itHall == workoutAppointment.hall}"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th th:text="#{workoutAppointment.workout}"></th>
+					<td>
+						<select name="workoutId">
+							<option th:each="itWorkout: ${workouts}" th:value="${itWorkout.id}" th:text="${itWorkout.workoutName}" th:selected="${itWorkout == workoutAppointment.workout}"></option>
+						</select>
+					</td>
+				</tr>
+				<tr th:if="${session.user != null and session.user.userRole == 'Administrator'}"><th></th><td><input type="submit" value="Edit"/></td></tr>
+		</table>
+	</form>
+	<form method="post" action="workoutAppointments/delete">
+			<input type="hidden" name="id" th:value="${workoutAppointment.id}">
+			<table th:if="${session.user != null and session.user.userRole == 'Administrator'}" class="tabela">
+				<tr><th style="background-color:#FF0000"></th><td><input type="submit" value="Delete"/></td></tr>
+			</table>
+		</form>
+		<table class="forma">
+			<caption th:text="#{workoutAppointment.caption}"></caption>
+			<tr><th th:text="#{workoutAppointment.dateAndTime}"></th><td th:text="${#temporals.format(workoutAppointment.dateOfWorkout, 'dd.MM.yyy . HH:mm')}"></td></tr>
+			<tr>
+				<th th:text="#{workoutAppointment.hall}"></th><td><a th:href="|halls/details?id=${workoutAppointment.hall.id}|" th:text="${workoutAppointment.hall.hallLabel}"></a></td>
+			</tr>
+			<tr>
+				<th th:text="#{workoutAppointment.workout}"></th><td><a th:href="|workouts/details?id=${workoutAppointment.workout.id}|" th:text="${workoutAppointment.workout.workoutName}"></a></td>
+			</tr>
+		</table>
+</body>
+</html>

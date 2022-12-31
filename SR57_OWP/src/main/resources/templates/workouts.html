@@ -1,0 +1,105 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org">     
+	<head>     
+		<meta charset="UTF-8">
+		<base th:href="@{/}">     
+		<link rel="stylesheet"  type="text/css"  href="css/NavigationBar.css"/>     
+		<link rel="stylesheet"  type="text/css"  href="css/StyleTable.css"/>
+		<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+		<script src="js/lokacijaJS.js" type="text/javascript"></script>
+		<title th:text="#{workouts.pageTitle}"></title>           
+	 </head>     
+	 <body>
+	 <div>
+	 <ul>     
+		 <li style="float:right"><a class="logOut" href="users/logout">Logout</a></li> 
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="users" th:text="#{link.users}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="trainers" th:text="#{link.trainers}"></a></li>            
+		 <li><a href="halls" th:text="#{link.halls}"></a></li>  
+		 <li><a href="workoutTypes" th:text="#{link.workoutTypes}"></a></li>
+		 <li><a href="workouts" th:text="#{link.workouts}"></a></li>
+		 <li><a href="workoutAppointments" th:text="#{link.workoutAppointments}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="comments" th:text="#{link.comments}"></a></li>
+		 <li><a href="membershipCards" th:text="#{link.membershipCards}"></a></li>
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|wishLists/details?username=${session.user.userName}|" th:text="#{link.wishLists}"></a></li> 
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|shoppingCarts/details?username=${session.user.userName}|" th:text="#{link.shoppingCarts}"></a></li>
+		 <li style="float:right"><a th:href="|users/detailsPersonal?id=${session.user.id}|" th:text="#{link.personal}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="workouts/add" th:text="#{link.addWorkouts}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Member'}"><a href="comments/add" th:text="#{link.addComments}"></a></li>
+       
+	 </ul>
+	 <br>
+	 <div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value="en" th:text="#{lang.eng}" th:selected="${#strings.equals(#locale.language,'en')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>
+	<br>
+	 	<form method="get">   	 	   
+	 		<table class="tabela">     
+	 			<caption th:text="#{workouts.caption}"></caption>     
+	 			<tr>      
+	 				<th th:text="#{workouts.picture}"></th>         
+	 				<th th:text="#{workouts.name}"></th>  
+	 				<th th:text="#{workouts.price}"></th>
+	 				<th th:text="#{workouts.averageGrade}"></th>
+	 				<th th:text="#{workouts.types}"></th>
+	 				<th th:text="#{workouts.grouping}"></th>
+	 				<th th:text="#{workouts.level}"></th>
+	 				<th></th>   
+	 			</tr>
+	 			<tr>
+				<th></th>
+				<th><input type="search" name="workoutName" th:value="${param.workoutName}?: null"/></th>
+						<th>
+							From:<input type="number" min="0" th:value="${param.priceFrom}?: '0'" name="priceFrom"/><br/>
+							To:<input type="number" min="0" th:value="${param.priceTo}?: '1000'" name="priceTo"/>
+						</th>
+						<th>
+							From:<input type="number" min="0" th:value="${param.averageGradeFrom}?: '0'" name="averageGradeFrom"/><br/>
+							To:<input type="number" min="0" th:value="${param.averageGradeTo}?: '5'" name="averageGradeTo"/>
+						</th>
+						<th>
+						<select name="workoutTypeId">
+							<option th:text="#{select.select}" value=""></option>
+							<option th:each="itWorkoutType: ${workoutTypes}" th:value="${itWorkoutType.id}" th:text="${itWorkoutType.workoutTypeName}" th:selected="${#strings.equals(itWorkoutType.id, param.workoutTypeId)}"></option>
+						</select>
+					</th>
+					<th>
+						<select name="workoutGrouping">
+							<option th:text="#{select.select}" value=""></option>
+							<option value="Individually" th:selected="${#strings.equals(param.workoutGrouping, 'Individually')}">Individually</option>
+							<option value="Group" th:selected="${#strings.equals(param.workoutGrouping, 'Group')}">Group</option>
+						</select>
+					</th>
+					<th>
+						<select name="workoutLevel">
+							<option th:text="#{select.select}" value=""></option>
+							<option value="Amateur" th:selected="${#strings.equals(param.workoutLevel, 'Amateur')}">Amateur</option>
+							<option value="Medium" th:selected="${#strings.equals(param.workoutLevel, 'Medium')}">Medium</option>
+							<option value="Advanced" th:selected="${#strings.equals(param.workoutLevel, 'Advanced')}">Advanced</option>
+						</select>
+					</th>
+						<th><input type="submit" value="Search"/></th>
+				</tr>
+	 			<tr th:each="itWorkout, status: ${workouts}">
+	 				<td><img width="100px" height="100px" alt="" src="images/slika1.jpeg"></td>
+	 				<td><a th:href="|workouts/details?id=${itWorkout.id}|" th:text="${itWorkout.workoutName}"></a></td>       
+	 				<td class="number" th:text="${itWorkout.price}"></td>   
+	 				<td class="number" th:text="${itWorkout.averageGrade}"></td>
+	 				<td>
+						<ul>
+							<li th:each="itWorkoutType: ${itWorkout.workoutTypes}"><a th:href="|workoutTypes/details?id=${itWorkoutType.id}|" th:text="${itWorkoutType.workoutTypeName}"></a></li>
+						</ul>
+					</td>
+					<td th:text="${itWorkout.workoutGrouping}"></td>
+	 				<td th:text="${itWorkout.workoutLevel}"></td>
+	 			</tr>
+	 		</table>
+	 		</form>
+	 		</div>         
+	 </body>   
+ </html>	

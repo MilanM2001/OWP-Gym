@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StyleForm.css"/>
+ 	<link rel="stylesheet" type="text/css" href="css/StyleTable.css"/>
+ 	<link rel="stylesheet" type="text/css" href="css/NavigationBar.css"/>
+ 	<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="js/lokacijaJS.js"></script>
+	<title th:text="#{addWorkoutAppointments.pageTitle}"></title> 
+</head>
+<body>
+	<div>
+		<ul>       
+	 	 <li style="float:right"><a class="logOut" href="users/logout">Logout</a></li> 
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="users" th:text="#{link.users}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="trainers" th:text="#{link.trainers}"></a></li>            
+		 <li><a href="halls" th:text="#{link.halls}"></a></li>  
+		 <li><a href="workoutTypes" th:text="#{link.workoutTypes}"></a></li>
+		 <li><a href="workouts" th:text="#{link.workouts}"></a></li>
+		 <li><a href="workoutAppointments" th:text="#{link.workoutAppointments}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="comments" th:text="#{link.comments}"></a></li>
+		 <li><a href="membershipCards" th:text="#{link.membershipCards}"></a></li>
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|wishLists/details?username=${session.user.userName}|" th:text="#{link.wishLists}"></a></li> 
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|shoppingCarts/details?username=${session.user.userName}|" th:text="#{link.shoppingCarts}"></a></li>
+		 <li style="float:right"><a th:href="|users/detailsPersonal?id=${session.user.id}|" th:text="#{link.personal}"></a></li>    
+	 	</ul>
+	 	<br>
+	 	<div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value="en" th:text="#{lang.eng}" th:selected="${#strings.equals(#locale.language,'en')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>
+	<br>
+		<form method="post" action="workoutAppointments/add">
+		<input type="hidden" name="id" value="1">
+		<table class="tabela">
+				<caption>Appointment</caption>
+				<tr>
+					<th>Date and Time:</th>
+					<td>
+						<input type="date" th:value="2022-02-01" name="date"/>&nbsp;
+						<input type="time" value="18:00" name="time"/>
+					</td>
+				</tr>
+				<tr>
+					<th>Hall:</th>
+					<td>
+						<select name="hallId">
+							<option th:each="itHall: ${halls}" th:value="${itHall.id}" th:text="${itHall.hallLabel}"></option>
+						</select>	
+					</td>
+				</tr>
+				<tr>
+					<th>Workout:</th>
+					<td>
+						<select name="workoutId">
+							<option th:each="itWorkout: ${workouts}" th:value="${itWorkout.id}" th:text="${itWorkout.workoutName}"></option>
+						</select>	
+					</td>
+				</tr>
+				<tr><th></th><td><input type="submit" value="Add"/></td></tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

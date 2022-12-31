@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StyleForm.css"/>
+	<link rel="stylesheet" type="text/css" href="css/NavigationBar.css"/>
+	<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="js/lokacijaJS.js"></script>
+	<title th:text="#{user.pageTitle}"></title> 
+</head>
+<body>
+	<ul>       
+ 		 <li style="float:right"><a class="logOut" href="users/logout">Logout</a></li> 
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="users" th:text="#{link.users}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="trainers" th:text="#{link.trainers}"></a></li>            
+		 <li><a href="halls" th:text="#{link.halls}"></a></li>  
+		 <li><a href="workoutTypes" th:text="#{link.workoutTypes}"></a></li>
+		 <li><a href="workouts" th:text="#{link.workouts}"></a></li>
+		 <li><a href="workoutAppointments" th:text="#{link.workoutAppointments}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="comments" th:text="#{link.comments}"></a></li>
+		 <li><a href="membershipCards" th:text="#{link.membershipCards}"></a></li>
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|wishLists/details?username=${session.user.userName}|" th:text="#{link.wishLists}"></a></li> 
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|shoppingCarts/details?username=${session.user.userName}|" th:text="#{link.shoppingCarts}"></a></li>
+		 <li style="float:right"><a th:href="|users/detailsPersonal?id=${session.user.id}|" th:text="#{link.personal}"></a></li>       
+ 	</ul>
+ 	<br>
+ 	<div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value="en" th:text="#{lang.eng}" th:selected="${#strings.equals(#locale.language,'en')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>
+	<br>  
+	<form method="post" action="users/edit">
+		<input type="hidden" name="id" th:value="${user.id}"/>
+		<table class="forma">
+			<caption th:text="#{user.caption}"></caption>
+			<tr><th th:text="#{user.username}"></th><td th:text="${user.userName}"></td></tr>
+			<tr><th th:text="#{user.email}"></th><td th:text="${user.email}"></td></tr>
+			<tr><th th:text="#{user.firstName}"></th><td th:text="${user.firstName}"></td></tr>
+			<tr><th th:text="#{user.lastName}"></th><td th:text="${user.lastName}"></td></tr>
+			<tr><th th:text="#{user.dateOfBirth}"></th><td th:text="${user.dateOfBirth}"></td></tr>
+			<tr><th th:text="#{user.address}"></th><td th:text="${user.address}"></td></tr>
+			<tr><th th:text="#{user.phone}"></th><td th:text="${user.phoneNumber}"></td></tr>
+			<tr><th th:text="#{user.dateOfRegistration}"></th><td th:text="${user.dateOfRegistration}"></td></tr>
+			<tr><th th:text="#{user.currentRole}"></th><td th:text="${user.userRole}"></td></tr>
+			<tr><th th:text="#{user.changeRole}"></th><td><select id="UserRole" class="form-control" data-val="true" th:value="${user.userRole}" name="userRole">
+			<option value ="Member">Member</option>
+			<option value ="Administrator">Administrator</option>
+			</select></td></tr>
+			<tr th:if="${user.userRole == 'Member'}"><th th:text="#{user.blocked}"></th><td><input type="checkbox" name="active" th:checked="${user.active}"/></td></tr>
+			<tr th:if="${session.user != null and session.user.userRole == 'Administrator'}"><th></th><td><input type="submit" value="Edit"/></td></tr>
+		</table>
+	</form>
+	<form th:if="${user.userRole == 'Member' and session.user.userRole == 'Administrator'}" method="post" action="users/delete">
+		<input type="hidden" name="id" th:value="${user.id}"/>
+		<table class="forma">
+			<tr><th style="background-color:#FF0000"></th><td><input type="submit" value="Delete"/></td></tr>
+		</table>
+	</form>
+</body>
+</html>

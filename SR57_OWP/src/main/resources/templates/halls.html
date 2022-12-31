@@ -1,0 +1,63 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org">     
+	<head>     
+		<meta charset="UTF-8">     
+		<base th:href="@{/}">   
+		<link rel="stylesheet"  type="text/css"  href="css/StyleTable.css"/>     
+	 	<link rel="stylesheet"  type="text/css"  href="css/NavigationBar.css"/>
+	 	<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+		<script src="js/lokacijaJS.js"></script>
+		<title th:text="#{halls.pageTitle}"></title>   
+	 </head>     
+	 <body>
+	 <div>
+	 	<ul>     
+	 	 <li style="float:right"><a class="logOut" href="users/logout">Logout</a></li> 
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="users" th:text="#{link.users}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="trainers" th:text="#{link.trainers}"></a></li>            
+		 <li><a href="halls" th:text="#{link.halls}"></a></li>  
+		 <li><a href="workoutTypes" th:text="#{link.workoutTypes}"></a></li>
+		 <li><a href="workouts" th:text="#{link.workouts}"></a></li>
+		 <li><a href="workoutAppointments" th:text="#{link.workoutAppointments}">Appointments</a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="comments" th:text="#{link.comments}"></a></li>
+		 <li><a href="membershipCards" th:text="#{link.membershipCards}"></a></li>
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|wishLists/details?username=${session.user.userName}|" th:text="#{link.wishLists}"></a></li> 
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|shoppingCarts/details?username=${session.user.userName}|" th:text="#{link.shoppingCarts}"></a></li>
+		 <li style="float:right"><a th:href="|users/detailsPersonal?id=${session.user.id}|" th:text="#{link.personal}"></a></li>
+	 	 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="halls/add" th:text="#{link.addHalls}"></a></li>    
+	 	</ul>
+	 	<br>
+	 	<div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value="en" th:text="#{lang.eng}" th:selected="${#strings.equals(#locale.language,'en')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>
+	<br>
+	 	<form method="get">     
+	 		<table class="tabela">     
+	 			<caption th:text="#{halls.caption}"></caption>     
+	 			<tr>      
+	 				<th th:text="#{halls.hallLabel}"></th>         
+	 				<th th:text="#{halls.capacity}"></th>
+	 				<th></th>     
+	 			</tr>
+	 			<tr>
+				<th><input type="search" name="hallLabel" th:value="${param.hallLabel}?: null"/></th>
+						<th>
+							From:<input type="number" min="0" th:value="${param.capacityFrom}?: '0'" name="capacityFrom"/><br/>
+							To:<input type="number" min="0" th:value="${param.capacityTo}?: '20'" name="capacityTo"/>
+						</th>
+						<th><input type="submit" value="Search"/></th>
+				</tr>
+	 			<tr th:each="itHall, status: ${halls}">  
+	 				<td><a th:href="|halls/details?id=${itHall.id}|" th:text="${itHall.hallLabel}"></a></td>   
+	 				<td class="number" th:text="${itHall.capacity}"></td>   
+	 			</tr>
+	 		</table>
+	 		</form>
+	 		</div>
+	 </body>   
+ </html>	

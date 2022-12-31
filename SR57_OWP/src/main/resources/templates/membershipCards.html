@@ -1,0 +1,101 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org">     
+	<head>     
+		<meta charset="UTF-8">
+		<base th:href="@{/}">     
+		<link rel="stylesheet"  type="text/css"  href="css/NavigationBar.css"/>     
+		<link rel="stylesheet"  type="text/css"  href="css/StyleTable.css"/>
+		<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+		<script src="js/lokacijaJS.js"></script>
+		<title th:text="#{membershipCards.pageTitle}"></title>           
+	 </head>     
+	 <body>
+	 <div>
+	 <ul>     
+		 <li style="float:right"><a class="logOut" href="users/logout">Logout</a></li> 
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="users" th:text="#{link.users}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="trainers" th:text="#{link.trainers}"></a></li>            
+		 <li><a href="halls" th:text="#{link.halls}"></a></li>  
+		 <li><a href="workoutTypes" th:text="#{link.workoutTypes}"></a></li>
+		 <li><a href="workouts" th:text="#{link.workouts}"></a></li>
+		 <li><a href="workoutAppointments" th:text="#{link.workoutAppointments}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="comments" th:text="#{link.comments}"></a></li>
+		 <li><a href="membershipCards" th:text="#{link.membershipCards}"></a></li>
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|wishLists/details?username=${session.user.userName}|" th:text="#{link.wishLists}"></a></li> 
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|shoppingCarts/details?username=${session.user.userName}|" th:text="#{link.shoppingCarts}"></a></li>
+		 <li style="float:right"><a th:href="|users/detailsPersonal?id=${session.user.id}|" th:text="#{link.personal}"></a></li>   
+	 </ul>
+	 <br>
+	 <div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value="en" th:text="#{lang.eng}" th:selected="${#strings.equals(#locale.language,'en')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>
+	<br>
+		<!-- Za Administratora -->
+	 	<form method="get">   	 	   
+	 		<table class="tabela" th:if="${session.user.userRole == 'Administrator'}">     
+	 			<caption th:if="${session.user != null and session.user.userRole == 'Administrator'}" th:text="#{membershipCards.caption}"></caption>         
+	 			<tr>
+	 				<th th:text="#{membershipCards.id}"></th>      
+	 				<th th:text="#{membershipCards.discount}"></th>         
+	 				<th th:text="#{membershipCards.cardPoints}"></th>  
+	 				<th th:text="#{membershipCards.cardUsername}"></th> 
+	 				<th th:text="#{membershipCards.cardStatus}"></th> 
+	 			</tr>
+	 			<tr th:if="${session.user.userRole == 'Administrator' and itMembershipCard.cardStatus == 'Waiting'}" th:each="itMembershipCard, status: ${membershipCards}"> 
+	 				<td><a th:href="|membershipCards/details?id=${itMembershipCard.id}|" th:text="${itMembershipCard.id}"></a></td>
+					<td th:text="${itMembershipCard.discount}"></td>
+					<td th:text="${itMembershipCard.cardPoints}"></td> 
+					<td th:text="${itMembershipCard.cardUsername}"></td>
+					<td th:text="${itMembershipCard.cardStatus}"></td>
+				</tr>
+			</table>
+			
+			<table class="tabela" th:if="${session.user.userRole == 'Administrator'}">     
+	 			<caption th:if="${session.user != null and session.user.userRole == 'Administrator'}" th:text="#{membershipCards.caption3}"></caption>         
+	 			<tr>     
+	 				<th th:text="#{membershipCards.discount}"></th>         
+	 				<th th:text="#{membershipCards.cardPoints}"></th>  
+	 				<th th:text="#{membershipCards.cardUsername}"></th> 
+	 				<th th:text="#{membershipCards.cardStatus}"></th> 
+	 			</tr>
+	 			<tr th:if="${session.user.userRole == 'Administrator'}" th:each="itMembershipCard, status: ${membershipCards}">
+					<td th:text="${itMembershipCard.discount}"></td>
+					<td th:text="${itMembershipCard.cardPoints}"></td> 
+					<td th:text="${itMembershipCard.cardUsername}"></td>
+					<td th:text="${itMembershipCard.cardStatus}"></td>
+				</tr>
+			</table>
+		</form>
+		
+		<!-- Za Korisnika -->
+		<form th:if="${session.user.userRole == 'Member'}" method="post" action="membershipCards/add">
+			<input type="hidden" name="id">
+			<input type="hidden" name="discount">
+			<input type="hidden" name="cardPoints">
+			<input type="hidden" name="cardUsername">
+			<input type="hidden" name="cardStatus">
+			<input type="submit" value="Request"/>
+		</form>
+		<form method="get">
+			<table class="tabela" th:if="${session.user.userRole == 'Member'}">
+				<caption th:if="${session.user != null and session.user.userRole == 'Member'}" th:text="#{membershipCards.caption2}"></caption>         
+	 			<tr>           
+	 				<th th:text="#{membershipCards.discount}"></th>         
+	 				<th th:text="#{membershipCards.cardPoints}"></th>  
+	 				<th th:text="#{membershipCards.cardUsername}"></th>
+	 			</tr> 
+				<tr th:if="${session.user.userRole == 'Member' and session.user.userName == itMembershipCard.cardUsername and itMembershipCard.cardStatus == 'Accepted'}" th:each="itMembershipCard, status: ${membershipCards}">
+					<td th:text="${itMembershipCard.discount}"></td>
+					<td th:text="${itMembershipCard.cardPoints}"></td> 
+					<td th:text="${itMembershipCard.cardUsername}"></td>
+				</tr>
+	 	   </table>
+	 	</form>
+	 		</div>         
+	 </body>   
+ </html>

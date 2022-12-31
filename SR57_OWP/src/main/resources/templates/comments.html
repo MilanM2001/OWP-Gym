@@ -1,0 +1,61 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org">     
+	<head>     
+		<meta charset="UTF-8">
+		<base th:href="@{/}">     
+		<link rel="stylesheet"  type="text/css"  href="css/NavigationBar.css"/>     
+		<link rel="stylesheet"  type="text/css"  href="css/StyleTable.css"/>
+		<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+		<script src="js/lokacijaJS.js"></script>
+		<title th:text="#{comments.pageTitle}"></title>           
+	 </head>     
+	 <body>
+	 <div>
+	 <ul>     
+		 <li style="float:right"><a class="logOut" href="users/logout">Logout</a></li> 
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="users" th:text="#{link.users}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="trainers" th:text="#{link.trainers}"></a></li>            
+		 <li><a href="halls" th:text="#{link.halls}"></a></li>  
+		 <li><a href="workoutTypes" th:text="#{link.workoutTypes}"></a></li>
+		 <li><a href="workouts" th:text="#{link.workouts}"></a></li>
+		 <li><a href="workoutAppointments" th:text="#{link.workoutAppointments}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="comments" th:text="#{link.comments}"></a></li>
+		 <li><a href="membershipCards" th:text="#{link.membershipCards}"></a></li>
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|wishLists/details?username=${session.user.userName}|" th:text="#{link.wishLists}"></a></li> 
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|shoppingCarts/details?username=${session.user.userName}|" th:text="#{link.shoppingCarts}"></a></li>
+		 <li style="float:right"><a th:href="|users/detailsPersonal?id=${session.user.id}|" th:text="#{link.personal}"></a></li>   
+	 </ul>
+	 <br>
+	 <div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value="en" th:text="#{lang.eng}" th:selected="${#strings.equals(#locale.language,'en')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>
+	<br>
+	 	<form method="get">   	 	   
+	 		<table class="tabela">     
+	 			<caption th:text="#{comments.caption}"></caption>     
+	 			<tr>      
+	 				<th th:text="#{comments.commentText}"></th>         
+	 				<th th:text="#{comments.commentGrade}"></th>  
+	 				<th th:text="#{comments.dateOfCreation}"></th> 
+	 				<th th:text="#{comments.username}"></th>
+	 				<th th:text="#{comments.workout}"></th> 
+	 				<th th:text="#{comments.commentStatus}"></th>   
+	 			</tr>
+	 			<tr th:if="${itComment.commentStatus == 'Waiting'}" th:each="itComment, status: ${comments}">
+					<td><a th:href="|comments/details?commentText=${itComment.commentText}|" th:text="${itComment.commentText}"></a></td>
+					<td th:text="${itComment.commentGrade}"></td>
+					<td th:text="${#temporals.format(itComment.dateOfCreation, 'dd.MM.yyy . HH:mm')}"></td> 
+					<td th:text="${itComment.username}"></td>
+					<td th:text="${itComment.workout.workoutName}"></td>
+					<td th:text="${itComment.commentStatus}"></td>
+				</tr>
+	 		</table>
+	 		</form>
+	 		</div>         
+	 </body>   
+ </html>	

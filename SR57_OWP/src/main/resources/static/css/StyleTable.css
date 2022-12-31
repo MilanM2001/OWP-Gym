@@ -1,0 +1,44 @@
+table.tabela {
+	border-collapse: collapse;
+}
+
+table.tabela caption {
+	font-size: 16pt
+}
+
+table.tabela th, td {
+	border: 1px solid Gray;
+	padding: 11px;
+	text-align: center;
+}
+
+tabel.tabela th {
+	color: #333;
+	background-color: #333;
+}
+
+table.tabela td.number {
+	text-align: center;
+	
+}
+
+table.tabela tr:nth-child(even) {
+	background-color: LightGray;
+}
+
+table.tabela input[type="search"] {
+	width: 100%;
+}
+
+tabel.tabela input, textare, select {
+	width: 150px;
+	box-sizing:border-box;
+}
+
+table.tabela input[type="checkbox"] {
+	width: 20px;
+}
+
+table.tabela input[type="radio"] {
+	width: 20px;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StyleForm.css"/>
+	<link rel="stylesheet" type="text/css" href="css/NavigationBar.css"/>
+	<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="js/lokacijaJS.js"></script>
+	<title th:text="#{membershipCard.pageTitle}"></title> 
+</head>
+<body>
+	<ul>       
+ 		 <li style="float:right"><a class="logOut" href="users/logout">Logout</a></li> 
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="users" th:text="#{link.users}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="trainers" th:text="#{link.trainers}"></a></li>            
+		 <li><a href="halls" th:text="#{link.halls}"></a></li>  
+		 <li><a href="workoutTypes" th:text="#{link.workoutTypes}"></a></li>
+		 <li><a href="workouts" th:text="#{link.workouts}"></a></li>
+		 <li><a href="workoutAppointments" th:text="#{link.workoutAppointments}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="comments" th:text="#{link.comments}"></a></li>
+		 <li><a href="membershipCards" th:text="#{link.membershipCards}"></a></li>
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|wishLists/details?username=${session.user.userName}|" th:text="#{link.wishLists}"></a></li> 
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|shoppingCarts/details?username=${session.user.userName}|" th:text="#{link.shoppingCarts}"></a></li>
+		 <li style="float:right"><a th:href="|users/detailsPersonal?id=${session.user.id}|" th:text="#{link.personal}"></a></li>       
+ 	</ul>
+ 	<br>
+ 	<div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value="en" th:text="#{lang.eng}" th:selected="${#strings.equals(#locale.language,'en')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>
+	<br>  
+	<form method="post" action="membershipCards/edit">
+		<input type="hidden" name="id" th:value="${membershipCard.id}"/>
+		<table class="forma">
+			<caption th:text="#{membershipCard.caption}"></caption>
+			<tr><th th:text="#{membershipCard.discount}"></th><td th:text="${membershipCard.discount}"></td></tr>
+			<tr><th th:text="#{membershipCard.cardPoints}"></th><td th:text="${membershipCard.cardPoints}"></td></tr>
+			<tr><th th:text="#{membershipCard.cardUsername}"></th><td th:text="${membershipCard.cardUsername}"></td></tr>
+			<tr><th th:text="#{membershipCard.currentStatus}"></th><td th:text="${membershipCard.cardStatus}"></td></tr>
+			<tr><th th:text="#{membershipCard.changeStatus}"></th><td><select id="CardStatus" class="form-control" data-val="true" th:value="${membershipCard.cardStatus}" name="cardStatus">
+			<option value ="Accepted">Accepted</option>
+			<option value ="Denied">Denied</option>
+			</select></td></tr>
+			<tr><th></th><td><input type="submit" value="Edit"/></td></tr>
+		</table>
+	</form>
+</body>
+</html>

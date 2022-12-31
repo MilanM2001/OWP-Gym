@@ -1,0 +1,73 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org">     
+	<head>     
+		<meta charset="UTF-8">
+		<base th:href="@{/}">     
+		<link rel="stylesheet"  type="text/css"  href="css/NavigationBar.css"/>     
+		<link rel="stylesheet"  type="text/css"  href="css/StyleTable.css"/>
+		<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+		<script src="js/lokacijaJS.js"></script>
+		<title th:text="#{wishList.pageTitle}"></title>           
+	 </head>     
+	 <body>
+	 <div>
+	 <ul>     
+		 <li style="float:right"><a class="logOut" href="users/logout">Logout</a></li> 
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="users" th:text="#{link.users}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="trainers" th:text="#{link.trainers}"></a></li>            
+		 <li><a href="halls" th:text="#{link.halls}"></a></li>  
+		 <li><a href="workoutTypes" th:text="#{link.workoutTypes}"></a></li>
+		 <li><a href="workouts" th:text="#{link.workouts}"></a></li>
+		 <li><a href="workoutAppointments" th:text="#{link.workoutAppointments}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Administrator'}"><a href="comments" th:text="#{link.comments}"></a></li>
+		 <li><a href="membershipCards" th:text="#{link.membershipCards}"></a></li>
+		 <li th:if="${session.user != null and session.user.userRole == 'Member'}"><a href="forWishing.html" th:text="#{link.forWishing}"></a></li> 
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|wishLists/details?username=${session.user.userName}|" th:text="#{link.wishLists}"></a></li> 
+		 <li style="float:right" th:if="${session.user != null and session.user.userRole == 'Member'}"><a th:href="|shoppingCarts/details?username=${session.user.userName}|" th:text="#{link.shoppingCarts}"></a></li>
+		 <li style="float:right"><a th:href="|users/detailsPersonal?id=${session.user.id}|" th:text="#{link.personal}"></a></li>    
+	 </ul>
+	 <br>
+	 <div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value="en" th:text="#{lang.eng}" th:selected="${#strings.equals(#locale.language,'en')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>
+	<br>
+	<table class="tabela">    
+	 		<caption th:text="#{wishList.caption1}"></caption>     
+	 			<tr>     
+	 				<th th:text="#{wishList.usernameText}"></th> 
+	 				<td th:text="${wishList.username}"></td>     
+	 			</tr>
+	 		</table>
+	 		<br>
+	 		<br>
+	 		<table class="tabela">     
+	 			<caption th:text="#{wishList.caption2}"></caption>     
+	 			<tr>  
+	 				<th th:text="#{wishList.workoutName}"></th>     
+	 				<th th:text="#{wishList.workoutPrice}"></th>     
+	 				<th th:text="#{wishList.workoutGrouping}"></th>    
+	 				<th th:text="#{wishList.workoutLevel}"></th>   
+	 				<th></th>    
+	 			</tr>
+	 			<tr th:each="itWorkout, status: ${wishList.wishedWorkouts}">
+	 				<td th:text="${itWorkout.workoutName}"></td>    
+	 				<td th:text="${itWorkout.price}"></td>    
+	 				<td th:text="${itWorkout.workoutGrouping}"></td>    
+	 				<td th:text="${itWorkout.workoutLevel}"></td>   
+	 				<td>    
+	 					<form th:if="${session.user.userName == wishList.username}" method="post" action="wishLists/unwishWorkout">     
+	 						<input type="hidden"  name="idWorkout"  th:value="${itWorkout.id}">
+							<input type="hidden" name="username" th:value="${wishList.username}">
+	 						<input type="submit"  value="Remove From Wish List" >    
+	 					</form>    
+	 				</td>   
+	 			</tr>
+	 		</table>
+	 		</div>         
+	 </body>   
+ </html>	
